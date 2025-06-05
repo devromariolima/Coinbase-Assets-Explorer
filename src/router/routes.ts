@@ -19,7 +19,7 @@
 //     ]
 //   },
 //   {
-//     path: '/produtos',
+//     path: '/cryptocurrencies',
 //     component: () => import('layouts/MainLayout.vue'),
 //     children: [
 //       {
