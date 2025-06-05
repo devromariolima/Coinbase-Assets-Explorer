@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 // import cryptocurrenciesService, { cryptocurrenciesService } from '../service/cryptocurrenciesService'
 // import { ref } from 'vue'
 
-export const usePermissoesStore = defineStore('Cryptocurrencies-store', () => {
+export const useCryptocurrenciesStore = defineStore('Cryptocurrencies-store', () => {
 //   const cryptocurrenciesService = ref<cryptocurrenciesService[]>([])
 
 
