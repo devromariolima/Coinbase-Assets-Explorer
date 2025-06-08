@@ -1,4 +1,4 @@
-import { api } from 'boot/axios'
+import { api } from '../boot/axios'
 // import {Cryptocurrencies,} from 'src/types/Cryptocurrencies'
 // import { AxiosError, AxiosResponse } from 'axios'
 

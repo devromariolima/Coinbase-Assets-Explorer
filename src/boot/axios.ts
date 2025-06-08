@@ -1,6 +1,6 @@
 import { boot } from 'quasar/wrappers'
-import axios, { AxiosError, AxiosInstance } from 'axios'
-import router from 'src/router'
+import axios, { AxiosError, type AxiosInstance } from 'axios'
+import { router } from '../router/routes'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -19,7 +19,7 @@ export interface ApiError extends AxiosError {
 }
 
 const api = axios.create({
-  baseURL: `${process.env.API_URL}`,
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true
 })
 
@@ -86,7 +86,9 @@ api.interceptors.response.use(response => {
   return Promise.reject(error)
 })
 
-export default boot(({ app }) => {
+import type { App } from 'vue'
+
+export default boot(({ app }: { app: App }) => {
   app.config.globalProperties.$axios = axios
   app.config.globalProperties.$api = api
 })
