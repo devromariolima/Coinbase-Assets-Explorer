@@ -6,8 +6,8 @@ import { api } from '../boot/axios'
 class CryptocurrenciesService {
 
 
-  async Cryptocurrencies (teste: string, params?: void): Promise<void> {
-    const response = await api.get(`url/${teste}/url`, { params })
+  async GetCryptocurrencies (params?: void): Promise<void> {
+    const response = await api.get(`https://api.coinbase.com/v2/assets/search`, { params })
     return response.data
   }
 
