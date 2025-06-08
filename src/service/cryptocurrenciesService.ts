@@ -5,20 +5,11 @@ import type { BitcoinData } from '../types/coinbase'
 class CryptocurrenciesService {
 
 
-  async GetCryptocurrencies (params?: void): Promise<BitcoinData> {
-     try {
-    const response = await api.get(`https://api.coinbase.com/v2/assets/search`, { params })
-    return response.data
-     }
-  }  catch (error: {
-      response?: {
-        status?: number
-        data?: {
-          detail?: string
-          message?: string
-        }
-      }
-    }) {
+  async GetCryptocurrencies(params?: void): Promise<BitcoinData> {
+    try {
+      const response = await api.get(`https://api.coinbase.com/v2/assets/search`, { params })
+      return response.data
+    } catch (error: any) {
       const axiosError = error as {
         response?: {
           status?: number;
@@ -34,6 +25,7 @@ class CryptocurrenciesService {
 
       throw new Error(axiosError.response?.data?.message || 'Erro de validação')
     }
+  }
 }
 
 export default new CryptocurrenciesService()
