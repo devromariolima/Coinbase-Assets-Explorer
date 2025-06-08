@@ -1,24 +1,22 @@
 import { defineStore } from 'pinia'
-// import {cryptocurrenciesService,} from 'src/types/cryptocurrenciesService'
-// import cryptocurrenciesService, { cryptocurrenciesService } from '../service/cryptocurrenciesService'
-// import { ref } from 'vue'
+import coinbase from '../types/coinbase'
+import cryptocurrenciesService from '../service/cryptocurrenciesService'
+import { ref } from 'vue'
 
 export const useCryptocurrenciesStore = defineStore('Cryptocurrencies-store', () => {
-//   const cryptocurrenciesService = ref<cryptocurrenciesService[]>([])
+  const coinbase = ref<coinbase[]>([])
 
 
 
 
-//   async function Cryptocurrencies (): Promise<void> {
-//     const response = await Service.Cryptocurrencies()
-//     if (response.data?.sistemas) {
-//       teste.value = response.data?.teste[0].teste
-//     }
-//     return response
-//   }
+  async function GetCryptocurrencies (): Promise<coinbase> {
+    const response = await cryptocurrenciesService.GetCryptocurrencies()
+    coinbase.value = response
+    return response
+  }
 
   return {
-    // recursos,
-    // Cryptocurrencies,
+    coinbase,
+    GetCryptocurrencies,
   }
 })
