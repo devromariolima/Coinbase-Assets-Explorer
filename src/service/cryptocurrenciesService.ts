@@ -1,13 +1,13 @@
 import { api } from '../boot/axios'
-import type { BitcoinData } from '../types/coinbase'
+import type BitcoinData from '../types/Coinbase'
 
 
 class CryptocurrenciesService {
 
 
-  async GetCryptocurrencies(params?: void): Promise<BitcoinData> {
+  async GetCryptocurrencies(): Promise<BitcoinData[]> {
     try {
-      const response = await api.get(`https://api.coinbase.com/v2/assets/search`, { params })
+      const response = await api.get(`https://api.coinbase.com/v2/assets/search`)
       return response.data
     } catch (error: any) {
       const axiosError = error as {

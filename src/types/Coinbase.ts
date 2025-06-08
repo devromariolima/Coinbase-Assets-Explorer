@@ -26,7 +26,7 @@ export interface LatestPrice {
   percent_change: PercentChange;
 }
 
-export interface BitcoinData {
+export default interface BitcoinData {
   id: string;
   symbol: string;
   name: string;
