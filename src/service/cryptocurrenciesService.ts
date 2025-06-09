@@ -6,8 +6,11 @@ class CryptocurrenciesService {
 
 
   async GetCryptocurrencies(): Promise<BitcoinData[]> {
+    
     try {
-      const response = await api.get(`https://api.coinbase.com/v2/assets/search`)
+      const response = await api.get('https://api.coinbase.com/v2/assets/search', {
+       withCredentials: false 
+      })
       return response.data
     } catch (error: any) {
       const axiosError = error as {
