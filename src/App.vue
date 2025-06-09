@@ -41,7 +41,7 @@ onMounted(() => getData())
       </div>
     </div>
 
-    <!-- <q-separator class="q-my-md" /> -->
+    <q-separator class="q-my-md" />
 
     <!-- <q-list
       v-if="!loading && store.produtos"
