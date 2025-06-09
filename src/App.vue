@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-// import { useRouter } from 'vue-router'
 import { useCryptocurrenciesStore } from './store/cryptocurrencies-Store'
-import type BitcoinData from './types/Coinbase'
-// import { useNotify } from 'src/composables/useNotify'
 
 const loading = ref<boolean>(true)
 const useStore = useCryptocurrenciesStore()
@@ -11,7 +8,7 @@ const coinbaseList = computed(() => useStore.Coinbase)
 
 async function getData () {
   try {
-    loading.value = true // Começa a carregar
+    loading.value = true 
     await useStore.GetCryptocurrencies()
   } catch (error) {
     if (error instanceof Error) {
@@ -26,50 +23,79 @@ onMounted(() => getData())
 </script>
 
 <template>
-   <q-layout>
-       <q-page-container>
-  <q-page padding>
-    <div class="text-h6 text-weight-medium row">
-      <div class="col-10">
-        GERENCIAR CRIPTOMOEDAS
-      </div>
-    </div>
+  <q-layout view="hHh lpR fFf">
+    <q-page-container>
+      <q-page class="bg-grey-3">
+        <div class="q-pa-md">
+          <div class="text-h5 text-weight-bold text-dark q-mb-md">
+            GERENCIAR CRIPTOMOEDAS
+            <q-btn
+              class="float-right"
+              icon="refresh"
+              label="Atualizar"
+              color="primary"
+              @click="getData()"
+            />
+          </div>
 
-    <q-separator class="q-my-md" />
-<q-list
- q-list
-  v-if="!loading && coinbaseList.length > 0"
-  bordered
-  separator
-  class="q-mt-md rounded-borders"
->
-  <q-item
-    v-for="coin in coinbaseList"
-    :key="coin.id"
-  >
-    <q-item-section>
-      <q-item-label>{{ coin.name }}</q-item-label>
-    </q-item-section>
-  </q-item>
-</q-list>
+          <q-separator class="q-my-md" />
 
-    <div
-      v-if="loading"
-      class="q-gutter-y-md q-mt-md"
-    >
-      <q-skeleton height="45px" />
-      <q-skeleton height="45px" />
-      <q-skeleton height="45px" />
-    </div>
+          <q-card flat class="bg-white">
+            <q-list
+              v-if="!loading && coinbaseList.length > 0"
+              bordered
+              separator
+            >
+              <q-item
+                v-for="coin in coinbaseList"
+                :key="coin.id"
+                class="q-py-sm"
+              >
+                <q-item-section avatar>
+                  <q-avatar size="md" color="grey-4">
+                    <img 
+                      :src="coin.image_url" 
+                      v-if="coin.image_url" 
+                      style="width: 70px; height: 70px; object-fit: contain"
+                    >
+                    <q-icon v-else name="payments" color="grey-7" />
+                  </q-avatar>
+                </q-item-section>
+                
+                <q-item-section>
+                  <q-item-label class="text-weight-medium text-dark">{{ coin.name }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
 
-    <div v-if="!loading && !useStore.Coinbase">
-      Não foram encontrados produtos cadastrados.
-    </div>
-  </q-page>
-   </q-page-container>
+            <div
+              v-if="loading"
+              class="q-gutter-y-md q-mt-md"
+            >
+              <q-skeleton height="50px" />
+              <q-skeleton height="50px" />
+              <q-skeleton height="50px" />
+            </div>
+
+            <q-banner
+              v-if="!loading && coinbaseList.length === 0"
+              class="bg-yellow-2 text-dark"
+            >
+              Não foram encontradas criptomoedas.
+            </q-banner>
+          </q-card>
+        </div>
+      </q-page>
+    </q-page-container>
   </q-layout>
 </template>
 
 <style scoped>
+.q-item {
+  min-height: 100px;
+}
 
+.q-item:hover {
+  background-color: #f8f9fa;
+}
 </style>
