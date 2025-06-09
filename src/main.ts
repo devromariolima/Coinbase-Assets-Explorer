@@ -1,28 +1,30 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import { Quasar } from 'quasar'
-
-// Importe os ícones e estilos do Quasar
+import { QBtn, QItem, QItemLabel, QItemSection, QLayout, QList, QPage, QPageContainer, QSeparator, QSkeleton, Quasar } from 'quasar'
 import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
-
 import './style.css'
 import App from './App.vue'
 
-// Crie e configure o app Vue
 const app = createApp(App)
-const pinia = createPinia()
 
-// Use o Pinia
-app.use(pinia)
-
-// Use o Quasar
 app.use(Quasar, {
-  plugins: {}, // Adicione plugins do Quasar aqui se necessário
-  config: {
-    // Configurações do Quasar
+  plugins: {},
+  config: {},
+ components: {
+    QBtn: QBtn,
+    QPage: QPage,
+    QSeparator: QSeparator,
+    QLayout: QLayout,
+    QList: QList,
+    QPageContainer: QPageContainer,
+    QItem: QItem,
+    QItemLabel: QItemLabel,
+    QItemSection: QItemSection,
+    QSkeleton: QSkeleton
   }
 })
 
-// Monte o app (note que você tinha uma linha duplicada)
+app.use(createPinia())
+
 app.mount('#app')

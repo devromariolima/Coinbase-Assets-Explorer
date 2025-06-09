@@ -11,7 +11,7 @@ class CryptocurrenciesService {
       const response = await api.get('https://api.coinbase.com/v2/assets/search', {
        withCredentials: false 
       })
-      return response.data
+      return response.data.data
     } catch (error: any) {
       const axiosError = error as {
         response?: {

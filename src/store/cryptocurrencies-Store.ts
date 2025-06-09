@@ -9,12 +9,12 @@ export const useCryptocurrenciesStore = defineStore('Cryptocurrencies-store', ()
 
 
 
-  async function GetCryptocurrencies (): Promise<BitcoinData[]> {
-    const response = await cryptocurrenciesService.GetCryptocurrencies()
-    Coinbase.value = response
-    console.log('dados das moedas' , response)
-    return response
-  }
+async function GetCryptocurrencies(): Promise<BitcoinData[]> {
+  const data = await cryptocurrenciesService.GetCryptocurrencies()
+  Coinbase.value = data
+  console.log('Dados das moedas:', Coinbase.value)
+  return data
+}
 
   return {
     Coinbase,
