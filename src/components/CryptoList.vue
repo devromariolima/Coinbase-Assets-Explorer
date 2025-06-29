@@ -9,9 +9,9 @@ const coinbaseList = computed(() => useStore.Coinbase)
 
 const router = useRouter()
 
-async function getData () {
+async function getData() {
   try {
-    loading.value = true 
+    loading.value = true
     await useStore.GetCryptocurrencies()
   } catch (error) {
     if (error instanceof Error) {
@@ -22,9 +22,9 @@ async function getData () {
   }
 }
 
-function goToDetails(symbol: string) {
-  router.push({ name: 'cryptocurrencies.details', params: { symbol } })
-}
+// function goToDetails(symbol: string) {
+//   router.push({ name: 'cryptocurrencies.details', params: { symbol } })
+// }
 
 onMounted(() => getData())
 </script>
@@ -34,47 +34,28 @@ onMounted(() => getData())
   <div class="q-pa-md">
     <div class="text-h5 text-weight-bold text-dark q-mb-md">
       GERENCIAR CRIPTOMOEDAS
-      <q-btn
-        class="float-right"
-        icon="refresh"
-        label="Atualizar"
-        color="primary"
-        @click="getData()"
-      />
     </div>
 
     <q-separator class="q-my-md" />
 
     <q-card flat class="bg-white">
-      <q-list
-        v-if="!loading && coinbaseList.length > 0"
-        bordered
-        separator
-      >
-        <q-item
-          v-for="coin in coinbaseList"
-          :key="coin.id"
-          class="q-py-sm"
-          clickable
-          @click="goToDetails(coin.symbol)"
-        >
+      <q-list v-if="!loading && coinbaseList.length > 0" bordered separator>
+        <q-item v-for="coin in coinbaseList" :key="coin.id" class="q-py-sm" clickable
+          :to="{ name: 'cryptocurrencies.details', params: { symbol: coin.symbol } }" tag="router-link">
           <q-item-section avatar>
             <q-avatar size="md" color="grey-4">
-              <img 
-                :src="coin.image_url" 
-                v-if="coin.image_url" 
-                style="width: 70px; height: 70px; object-fit: contain"
-              >
+              <img :src="coin.image_url" v-if="coin.image_url" style="width: 70px; height: 70px; object-fit: contain" />
               <q-icon v-else name="payments" color="grey-7" />
             </q-avatar>
           </q-item-section>
-          
+
           <q-item-section>
             <q-item-label class="text-weight-medium text-dark">
               {{ coin.name }}
             </q-item-label>
           </q-item-section>
         </q-item>
+
       </q-list>
 
       <div v-if="loading" class="q-gutter-y-md q-mt-md">
@@ -83,10 +64,7 @@ onMounted(() => getData())
         <q-skeleton height="50px" />
       </div>
 
-      <q-banner
-        v-if="!loading && coinbaseList.length === 0"
-        class="bg-yellow-2 text-dark"
-      >
+      <q-banner v-if="!loading && coinbaseList.length === 0" class="bg-yellow-2 text-dark">
         Não foram encontradas criptomoedas.
       </q-banner>
     </q-card>

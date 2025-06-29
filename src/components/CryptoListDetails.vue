@@ -1,43 +1,46 @@
-
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useCryptocurrenciesStore } from '../store/cryptocurrencies-Store'
-import type { CryptoCurrency } from '../types/CoinBaseId'; 
+import type { CryptoCurrency } from '../types/CoinBaseId'
 
 const loading = ref<boolean>(true)
 const selectedCoin = ref<CryptoCurrency | null>(null)
 const useStore = useCryptocurrenciesStore()
+const route = useRoute()
 
 const coinbaseList = computed(() => useStore.Coinbase)
 
-async function getDataByid () {
+async function getDataByid(symbol: string) {
   try {
-    loading.value = true 
+    loading.value = true
     await useStore.GetCryptocurrencies()
+
+    const coin = useStore.Coinbase.find(c => c.symbol === symbol)
+    if (coin) {
+      selectedCoin.value = coin
+    }
   } catch (error) {
     if (error instanceof Error) {
-      // notify.error(error.message ?? 'Erro ao buscar criptomoedas')
     }
   } finally {
     loading.value = false
   }
 }
 
-onMounted(() => getDataByid())
+onMounted(() => {
+  const symbol = route.params.symbol as string
+  getDataByid(symbol)
+})
 
 const selectCoin = (coin: CryptoCurrency) => {
   selectedCoin.value = coin
 }
-
-watch(selectedCoin, (newCoin) => {
-  if (newCoin) {
-  }
-})
 </script>
+
 
 <template>
   <div class="q-pa-md">
-    <!-- Cabeçalho e botão de atualização -->
     <div class="text-h5 text-weight-bold text-dark q-mb-md">
       GERENCIAR CRIPTOMOEDAS
       <q-btn
@@ -45,13 +48,11 @@ watch(selectedCoin, (newCoin) => {
         icon="refresh"
         label="Atualizar"
         color="primary"
-        @click="getDataByid()"
       />
     </div>
 
     <q-separator class="q-my-md" />
 
-    <!-- Exibição da lista de criptomoedas -->
     <q-card flat class="bg-white">
       <q-list
         v-if="!loading && coinbaseList.length > 0"

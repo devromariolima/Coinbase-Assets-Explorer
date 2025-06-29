@@ -11,7 +11,7 @@ const routes: RouteRecordRaw[] = [
         name: 'cryptocurrencies.listar'
       },
       {
-        path: '/cryptocurrencies/visualizar/:symbol',
+        path: '/cryptocurrencies/:symbol',
         component: () => import('../components/CryptoListDetails.vue'),
         name: 'cryptocurrencies.details'
       }
