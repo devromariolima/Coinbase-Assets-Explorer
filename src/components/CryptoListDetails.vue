@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
 import { useCryptocurrenciesStore } from '../store/cryptocurrencies-Store'
-import { CryptoCurrency } from '../'  // Importe a interface corretamente
+import type { CryptoCurrency } from '../types/CoinBaseId'; 
 
 const loading = ref<boolean>(true)
 const selectedCoin = ref<CryptoCurrency | null>(null)
@@ -10,7 +10,7 @@ const useStore = useCryptocurrenciesStore()
 
 const coinbaseList = computed(() => useStore.Coinbase)
 
-async function getData () {
+async function getDataByid () {
   try {
     loading.value = true 
     await useStore.GetCryptocurrencies()
@@ -23,7 +23,7 @@ async function getData () {
   }
 }
 
-onMounted(() => getData())
+onMounted(() => getDataByid())
 
 const selectCoin = (coin: CryptoCurrency) => {
   selectedCoin.value = coin
@@ -31,7 +31,6 @@ const selectCoin = (coin: CryptoCurrency) => {
 
 watch(selectedCoin, (newCoin) => {
   if (newCoin) {
-    // Executa algo sempre que uma nova moeda for selecionada
   }
 })
 </script>
@@ -46,7 +45,7 @@ watch(selectedCoin, (newCoin) => {
         icon="refresh"
         label="Atualizar"
         color="primary"
-        @click="getData()"
+        @click="getDataByid()"
       />
     </div>
 
