@@ -7,14 +7,14 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '/cryptocurrencies',
-        component: () => import('../App.vue'),
+        component: () => import('../components/CryptoList.vue'),
         name: 'cryptocurrencies.listar'
       },
-    //   {
-    //     path: '/cryptocurrencies/visualizar/:id',
-    //     component: () => import(''),
-    //     name: 'cryptocurrencies.editar'
-    //   }
+      {
+        path: '/cryptocurrencies/visualizar/:nome',
+        component: () => import('../components/CryptoListDetails.vue'),
+        name: 'cryptocurrencies.Details'
+      }
     ]
   },
   {
