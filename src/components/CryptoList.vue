@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, computed} from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useCryptocurrenciesStore } from '../store/cryptocurrencies-Store'
+import { useRouter } from 'vue-router'
 
 const loading = ref<boolean>(true)
 const useStore = useCryptocurrenciesStore()
 const coinbaseList = computed(() => useStore.Coinbase)
+
+const router = useRouter()
 
 async function getData () {
   try {
@@ -19,9 +22,13 @@ async function getData () {
   }
 }
 
-onMounted(() => getData())
+function goToDetails(symbol: string) {
+  router.push({ name: 'cryptocurrencies.details', params: { symbol } })
+}
 
+onMounted(() => getData())
 </script>
+
 
 <template>
   <div class="q-pa-md">
@@ -48,6 +55,8 @@ onMounted(() => getData())
           v-for="coin in coinbaseList"
           :key="coin.id"
           class="q-py-sm"
+          clickable
+          @click="goToDetails(coin.symbol)"
         >
           <q-item-section avatar>
             <q-avatar size="md" color="grey-4">
@@ -61,7 +70,9 @@ onMounted(() => getData())
           </q-item-section>
           
           <q-item-section>
-            <q-item-label class="text-weight-medium text-dark">{{ coin.name }}</q-item-label>
+            <q-item-label class="text-weight-medium text-dark">
+              {{ coin.name }}
+            </q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -81,6 +92,7 @@ onMounted(() => getData())
     </q-card>
   </div>
 </template>
+
 
 <style scoped>
 .q-item {
