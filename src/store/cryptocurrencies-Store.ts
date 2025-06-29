@@ -18,8 +18,8 @@ async function GetCryptocurrencies(): Promise<BitcoinData[]> {
   return data
 }
 
-async function GetCryptocurrenciesByid(nome: string): Promise<CryptoData[]> {
-  const data = await cryptocurrenciesService.GetCryptocurrenciesByid(nome)
+async function GetCryptocurrenciesByid(symbol: string): Promise<CryptoData[]> {
+  const data = await cryptocurrenciesService.GetCryptocurrenciesByid(symbol)
   CoinbaseId.value = data
   console.log('Dados da moedas', Coinbase.value)
   return data

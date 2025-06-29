@@ -31,10 +31,10 @@ class CryptocurrenciesService {
     }
   }
 
-    async GetCryptocurrenciesByid(name:string): Promise<CryptoData[]> {
+    async GetCryptocurrenciesByid(symbol:string): Promise<CryptoData[]> {
     
     try {
-      const response = await api.get(`https://api.coinbase.com/v2/assets/search?query=${name}`, {
+      const response = await api.get(`https://api.coinbase.com/v2/assets/search?query=${symbol}`, {
        withCredentials: false 
       })
       return response.data.data
