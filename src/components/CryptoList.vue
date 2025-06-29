@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed} from 'vue'
 import { useCryptocurrenciesStore } from '../store/cryptocurrencies-Store'
 
 const loading = ref<boolean>(true)
@@ -20,6 +20,7 @@ async function getData () {
 }
 
 onMounted(() => getData())
+
 </script>
 
 <template>

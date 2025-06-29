@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CryptoList from '../src/components/CriptoList.vue'
+import CryptoList from './components/CryptoList.vue'
 </script>
 
 <template>
