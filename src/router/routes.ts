@@ -2,11 +2,11 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/cryptocurrencies',
+    path: '/',
     component: () => import('../App.vue'),
     children: [
       {
-        path: '',
+        path: '/cryptocurrencies',
         component: () => import('../App.vue'),
         name: 'cryptocurrencies.listar'
       },
