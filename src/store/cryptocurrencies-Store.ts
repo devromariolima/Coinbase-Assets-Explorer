@@ -14,14 +14,13 @@ export const useCryptocurrenciesStore = defineStore('Cryptocurrencies-store', ()
 async function GetCryptocurrencies(): Promise<BitcoinData[]> {
   const data = await cryptocurrenciesService.GetCryptocurrencies()
   Coinbase.value = data
-  console.log('Dados das moedas:', Coinbase.value)
   return data
 }
 
 async function GetCryptocurrenciesByid(symbol: string): Promise<CryptoData[]> {
   const data = await cryptocurrenciesService.GetCryptocurrenciesByid(symbol)
   CoinbaseId.value = data
-  console.log('Dados da moedas', Coinbase.value)
+  console.log('Dados da moeda', Coinbase.value)
   return data
 }
 
