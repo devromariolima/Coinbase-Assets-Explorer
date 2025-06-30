@@ -23,7 +23,7 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 
 - Coinbase API v2
 
-- [Linguagem/Framework principal do seu projeto] (ex: JavaScript, React, Python, etc.)
+- [Framework principal] (Vue.js)
 
 ## Endpoints da API Utilizados
 - GET /v2/assets/search - Busca ativos por nome ou símbolo
