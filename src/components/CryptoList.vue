@@ -55,7 +55,6 @@ onMounted(() => getData())
 
       <q-separator class="q-my-sm" />
 
-      <!-- Lista usando os dados filtrados -->
       <q-list
         v-if="!loading && filteredCoins.length > 0"
         bordered
@@ -97,6 +96,21 @@ onMounted(() => getData())
 
       <!-- Estados de loading e empty -->
       <div v-if="loading" class="q-gutter-y-md q-mt-md">
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
+        <q-skeleton height="60px" />
         <q-skeleton height="60px" />
         <q-skeleton height="60px" />
         <q-skeleton height="60px" />
