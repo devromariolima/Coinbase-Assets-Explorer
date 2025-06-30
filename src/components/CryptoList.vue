@@ -3,21 +3,17 @@ import { ref, onMounted, computed } from 'vue'
 import { useCryptocurrenciesStore } from '../store/cryptocurrencies-Store'
 import { useRouter } from 'vue-router'
 
-
 const router = useRouter()
-const loading = ref<boolean>(true)
-const useStore = useCryptocurrenciesStore()
-const coinbaseList = computed(() => useStore.Coinbase)
-
+const loading = ref(true)
+const store = useCryptocurrenciesStore()
+const coinbaseList = computed(() => store.Coinbase)
 
 async function getData() {
   try {
     loading.value = true
-    await useStore.GetCryptocurrencies()
+    await store.GetCryptocurrencies()
   } catch (error) {
-    if (error instanceof Error) {
-      // notify.error(error.message ?? 'Erro ao buscar criptomoedas')
-    }
+    console.error(error)
   } finally {
     loading.value = false
   }
@@ -26,60 +22,62 @@ async function getData() {
 onMounted(() => getData())
 </script>
 
-
 <template>
-  <div class="q-pa-md">
-    <div class="text-h5 text-weight-bold text-dark q-mb-md">
-      GERENCIAR CRIPTOMOEDAS
+  <q-page padding class="bg-grey-2">
+    <div class="text-h5 text-weight-bold text-black q-mb-md text-center">
+      Cotação de Criptomoedas
     </div>
 
-    <q-separator class="q-my-md" />
+    <q-separator class="q-my-sm" />
 
-    <q-card flat class="bg-white">
-      <q-list v-if="!loading && coinbaseList.length > 0" bordered separator>
-        <q-item
-          v-for="coin in coinbaseList"
-          :key="coin.id"
-          class="q-py-sm"
-          clickable
-          @click="() => router.push({ name: 'cryptocurrencies.details', params: { symbol: coin.symbol} })"
-        >
-          <q-item-section avatar>
-            <q-avatar size="md" color="grey-4">
-              <img :src="coin.image_url" v-if="coin.image_url" style="width: 70px; height: 70px; object-fit: contain" />
-              <q-icon v-else name="payments" color="grey-7" />
-            </q-avatar>
-          </q-item-section>
+    <q-list
+      v-if="!loading && coinbaseList.length > 0"
+      bordered
+      separator
+      class="rounded-borders bg-white shadow-1 q-mt-md"
+    >
+      <q-item
+        v-for="coin in coinbaseList"
+        :key="coin.id"
+        clickable
+        @click="() => router.push({ name: 'cryptocurrencies.details', params: { symbol: coin.symbol } })"
+        class="q-py-md"
+      >
+        <q-item-section avatar>
+          <q-avatar rounded size="50px">
+            <img
+              v-if="coin.image_url"
+              :src="coin.image_url"
+              style="object-fit: contain"
+            />
+            <q-icon v-else name="payments" color="grey-6" />
+          </q-avatar>
+        </q-item-section>
 
-          <q-item-section>
-            <q-item-label class="text-weight-medium text-dark">
-              {{ coin.name }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
+        <q-item-section>
+          <q-item-label class="text-weight-bold text-black">
+            {{ coin.name }}
+          </q-item-label>
+          <q-item-label caption class="text-grey-7">
+            {{ coin.symbol }}
+          </q-item-label>
+        </q-item-section>
 
-      </q-list>
+        <q-item-section side>
+          <q-icon name="chevron_right" color="grey-6" />
+        </q-item-section>
+      </q-item>
+    </q-list>
 
-      <div v-if="loading" class="q-gutter-y-md q-mt-md">
-        <q-skeleton height="50px" />
-        <q-skeleton height="50px" />
-        <q-skeleton height="50px" />
-      </div>
+    <div v-if="loading" class="q-gutter-y-md q-mt-md">
+      <q-skeleton height="60px" />
+      <q-skeleton height="60px" />
+      <q-skeleton height="60px" />
+    </div>
 
-      <q-banner v-if="!loading && coinbaseList.length === 0" class="bg-yellow-2 text-dark">
-        Não foram encontradas criptomoedas.
-      </q-banner>
-    </q-card>
-  </div>
+    <div v-if="!loading && coinbaseList.length === 0" class="text-grey-7 q-mt-md text-center">
+      Nenhuma criptomoeda encontrada.
+    </div>
+  </q-page>
 </template>
 
-
-<style scoped>
-.q-item {
-  min-height: 100px;
-}
-
-.q-item:hover {
-  background-color: #f8f9fa;
-}
-</style>
