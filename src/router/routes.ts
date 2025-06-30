@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/cryptocurrencies' // Redireciona para a lista por padrão
+    redirect: '/cryptocurrencies'
   },
   {
     path: '/cryptocurrencies',
@@ -14,11 +14,11 @@ const routes: RouteRecordRaw[] = [
     path: '/cryptocurrencies/:symbol',
     component: () => import('../components/CryptoListDetails.vue'),
     name: 'cryptocurrencies.details',
-    props: true // Isso permite passar os parâmetros da rota como props
+    props: true
   },
   {
     path: '/:catchAll(.*)*',
-    redirect: '/cryptocurrencies' // Redireciona para a lista se a rota não existir
+    redirect: '/cryptocurrencies'
   }
 ]
 
