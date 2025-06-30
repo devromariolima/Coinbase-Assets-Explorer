@@ -3,11 +3,12 @@ import { ref, onMounted, computed } from 'vue'
 import { useCryptocurrenciesStore } from '../store/cryptocurrencies-Store'
 import { useRouter } from 'vue-router'
 
+
+const router = useRouter()
 const loading = ref<boolean>(true)
 const useStore = useCryptocurrenciesStore()
 const coinbaseList = computed(() => useStore.Coinbase)
 
-const router = useRouter()
 
 async function getData() {
   try {
@@ -21,10 +22,6 @@ async function getData() {
     loading.value = false
   }
 }
-
-// function goToDetails(symbol: string) {
-//   router.push({ name: 'cryptocurrencies.details', params: { symbol } })
-// }
 
 onMounted(() => getData())
 </script>
@@ -40,8 +37,13 @@ onMounted(() => getData())
 
     <q-card flat class="bg-white">
       <q-list v-if="!loading && coinbaseList.length > 0" bordered separator>
-        <q-item v-for="coin in coinbaseList" :key="coin.id" class="q-py-sm" clickable
-          :to="{ name: 'cryptocurrencies.details', params: { symbol: coin.symbol } }" tag="router-link">
+        <q-item
+          v-for="coin in coinbaseList"
+          :key="coin.id"
+          class="q-py-sm"
+          clickable
+          @click="() => router.push({ name: 'cryptocurrencies.details', params: { symbol: coin.symbol} })"
+        >
           <q-item-section avatar>
             <q-avatar size="md" color="grey-4">
               <img :src="coin.image_url" v-if="coin.image_url" style="width: 70px; height: 70px; object-fit: contain" />
