@@ -38,7 +38,7 @@ onMounted(() => getData())
   <q-page padding class="bg-grey-2 justify-center">
     <div class="col-12 col-md-8 col-lg-6">
       <div class="text-h5 text-weight-bold text-black q-mb-md text-center">
-        Cotação de Criptomoedas
+        informe a criptomoedas desejada
       </div>
 
       <q-input
