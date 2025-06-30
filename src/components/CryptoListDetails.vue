@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCryptocurrenciesStore } from '../store/cryptocurrencies-Store'
 import type { CryptoCurrency } from '../types/CoinBaseId'
@@ -9,12 +9,10 @@ const selectedCoin = ref<CryptoCurrency | null>(null)
 const useStore = useCryptocurrenciesStore()
 const route = useRoute()
 
-const coinbaseList = computed(() => useStore.Coinbase)
-
 async function getDataByid(symbol: string) {
   try {
     loading.value = true
-    await useStore.GetCryptocurrencies()
+    await useStore.GetCryptocurrenciesByid(symbol)
 
     const coin = useStore.Coinbase.find(c => c.symbol === symbol)
     if (coin) {
@@ -22,6 +20,7 @@ async function getDataByid(symbol: string) {
     }
   } catch (error) {
     if (error instanceof Error) {
+      // Tratar erro aqui se necessário
     }
   } finally {
     loading.value = false
@@ -32,89 +31,50 @@ onMounted(() => {
   const symbol = route.params.symbol as string
   getDataByid(symbol)
 })
-
-const selectCoin = (coin: CryptoCurrency) => {
-  selectedCoin.value = coin
-}
 </script>
-
 
 <template>
   <div class="q-pa-md">
     <div class="text-h5 text-weight-bold text-dark q-mb-md">
-      GERENCIAR CRIPTOMOEDAS
-      <q-btn
-        class="float-right"
-        icon="refresh"
-        label="Atualizar"
-        color="primary"
-      />
+      DADOS DA CRIPTOMOEDA
     </div>
 
     <q-separator class="q-my-md" />
 
-    <q-card flat class="bg-white">
-      <q-list
-        v-if="!loading && coinbaseList.length > 0"
-        bordered
-        separator
-      >
-        <q-item
-          v-for="coin in coinbaseList"
-          :key="coin.id"
-          class="q-py-sm"
-          @click="selectCoin(coin)"
-        >
-          <q-item-section avatar>
-            <q-avatar size="md" color="grey-4">
-              <img 
-                :src="coin.image_url" 
-                v-if="coin.image_url" 
-                style="width: 70px; height: 70px; object-fit: contain"
-              />
-              <q-icon v-else name="payments" color="grey-7" />
-            </q-avatar>
-          </q-item-section>
-          
-          <q-item-section>
-            <q-item-label class="text-weight-medium text-dark">{{ coin.name }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
+    <!-- Exibição do loading -->
+    <div v-if="loading" class="q-gutter-y-md q-mt-md">
+      <q-skeleton height="50px" />
+      <q-skeleton height="50px" />
+      <q-skeleton height="50px" />
+    </div>
 
-      <!-- Exibição do loading -->
-      <div v-if="loading" class="q-gutter-y-md q-mt-md">
-        <q-skeleton height="50px" />
-        <q-skeleton height="50px" />
-        <q-skeleton height="50px" />
-      </div>
-
-      <!-- Banner caso não encontre criptomoedas -->
-      <q-banner
-        v-if="!loading && coinbaseList.length === 0"
-        class="bg-yellow-2 text-dark"
-      >
-        Não foram encontradas criptomoedas.
-      </q-banner>
-    </q-card>
+    <!-- Banner caso não encontre a criptomoeda -->
+    <q-banner
+      v-if="!loading && !selectedCoin"
+      class="bg-yellow-2 text-dark"
+    >
+      Não foi possível encontrar os dados da criptomoeda.
+    </q-banner>
 
     <!-- Exibição dos detalhes da criptomoeda selecionada -->
     <q-card v-if="selectedCoin" class="q-mt-md">
       <q-card-section>
-        <div class="text-h6 text-weight-bold">{{ selectedCoin.name }}</div>
-        <q-avatar size="lg" class="q-mb-md">
-          <img :src="selectedCoin.image_url" />
-        </q-avatar>
-        <div class="text-body1">{{ selectedCoin.description }}</div>
+        <div class="row items-center">
+          <q-avatar size="lg" class="q-mr-md">
+            <img :src="selectedCoin.image_url" />
+          </q-avatar>
+          <div class="text-h6 text-weight-bold">{{ selectedCoin.name }}</div>
+        </div>
+        <div class="text-body1 q-mt-md">{{ selectedCoin.description }}</div>
       </q-card-section>
 
       <q-separator />
 
       <q-card-section>
         <div><strong>Preço Atual:</strong> {{ selectedCoin.latest_price.amount.amount }} {{ selectedCoin.latest_price.amount.currency }}</div>
-        <div><strong>Cap. de Mercado:</strong> {{ selectedCoin.market_cap | currency }}</div>
-        <div><strong>Volume 24h:</strong> {{ selectedCoin.volume_24h | currency }}</div>
-        <div><strong>Fornecimento Circulante:</strong> {{ selectedCoin.circulating_supply | currency }}</div>
+        <div><strong>Cap. de Mercado:</strong> {{ selectedCoin.market_cap  }}</div>
+        <div><strong>Volume 24h:</strong> {{ selectedCoin.volume_24h  }}</div>
+        <div><strong>Fornecimento Circulante:</strong> {{ selectedCoin.circulating_supply }}</div>
         <div><strong>Dominância:</strong> {{ selectedCoin.dominance }}%</div>
       </q-card-section>
 

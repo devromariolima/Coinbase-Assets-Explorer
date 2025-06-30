@@ -6,7 +6,7 @@ import type { CryptoData } from '../types/CoinBaseId'
 
 export const useCryptocurrenciesStore = defineStore('Cryptocurrencies-store', () => {
   const Coinbase = ref<BitcoinData[]>([])
-  const CoinbaseId = ref<CryptoData[]>([])
+  const CoinbaseId = ref<CryptoData | null>(null)
 
 
 
@@ -17,11 +17,11 @@ async function GetCryptocurrencies(): Promise<BitcoinData[]> {
   return data
 }
 
-async function GetCryptocurrenciesByid(symbol: string): Promise<CryptoData[]> {
-  const data = await cryptocurrenciesService.GetCryptocurrenciesByid(symbol)
-  CoinbaseId.value = data
-  console.log('Dados da moeda', Coinbase.value)
-  return data
+async function GetCryptocurrenciesByid(symbol: string): Promise<CryptoData> {
+  const data = await cryptocurrenciesService.GetCryptocurrenciesByid(symbol);
+  CoinbaseId.value = data;
+  console.log('Dados da moeda', data);
+  return data;
 }
 
   return {

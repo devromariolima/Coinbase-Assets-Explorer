@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import CryptoList from './components/CryptoList.vue'
+
 </script>
 
 <template>
   <q-layout view="hHh lpR fFf">
     <q-page-container>
       <q-page class="bg-grey-3">
-        <CryptoList />
+        <router-view />
       </q-page>
     </q-page-container>
   </q-layout>
