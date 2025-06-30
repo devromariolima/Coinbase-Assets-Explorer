@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const loading = ref(true)
+const search = ref('')
 const store = useCryptocurrenciesStore()
 const coinbaseList = computed(() => store.Coinbase)
 
@@ -25,8 +26,23 @@ onMounted(() => getData())
 <template>
   <q-page padding class="bg-grey-2">
     <div class="text-h5 text-weight-bold text-black q-mb-md text-center">
-      Cotação de Criptomoedas
+     informe o nome da Criptomoeda
     </div>
+       <div class="row">
+        <div class="col">
+            <q-input
+              v-model="search"
+              class="col-12 col-sm"
+              filled
+              label="Pesquisar ..."
+            />
+            />
+            <div
+              class="col-12 col-sm-shrink"
+            >
+            </div>
+          </div>
+        </div>
 
     <q-separator class="q-my-sm" />
 
