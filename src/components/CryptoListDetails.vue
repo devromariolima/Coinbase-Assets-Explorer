@@ -35,8 +35,8 @@ onMounted(() => {
 
 <template>
   <div class="q-pa-md">
-    <div class="text-h5 text-weight-bold text-dark q-mb-md">
-      DADOS DA CRIPTOMOEDA
+    <div class="text-h5 text-weight-bold text-black q-mb-md">
+      DETALHES DA CRIPTOMOEDA
     </div>
 
     <q-separator class="q-my-md" />
@@ -51,58 +51,116 @@ onMounted(() => {
     <!-- Banner caso não encontre a criptomoeda -->
     <q-banner
       v-if="!loading && !selectedCoin"
-      class="bg-yellow-2 text-dark"
+      class="bg-yellow-2 text-black"
     >
       Não foi possível encontrar os dados da criptomoeda.
     </q-banner>
 
     <!-- Exibição dos detalhes da criptomoeda selecionada -->
-    <q-card v-if="selectedCoin" class="q-mt-md">
-      <q-card-section>
-        <div class="row items-center">
-          <q-avatar size="lg" class="q-mr-md">
+    <div v-if="selectedCoin">
+      <!-- Cabeçalho com informações básicas -->
+      <q-card class="q-mb-md">
+        <q-card-section class="row items-center">
+          <q-avatar size="xl" class="q-mr-md">
             <img :src="selectedCoin.image_url" />
           </q-avatar>
-          <div class="text-h6 text-weight-bold">{{ selectedCoin.name }}</div>
+          <div>
+            <div class="text-h4 text-weight-bold text-black">{{ selectedCoin.name }} ({{ selectedCoin.symbol }})</div>
+            <div class="text-subtitle1 text-black">Rank #{{ selectedCoin.rank }}</div>
+            <div class="text-caption text-grey-8">Lançado {{ selectedCoin.launched_at }}</div>
+          </div>
+        </q-card-section>
+        
+        <q-card-section>
+          <div class="text-body1 text-black">{{ selectedCoin.description }}</div>
+        </q-card-section>
+      </q-card>
+
+      <!-- Informações de preço e mercado -->
+      <div class="row q-col-gutter-md q-mb-md">
+        <!-- Preço atual -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6 text-black">Preço Atual</div>
+              <div class="text-h4 text-weight-bold text-black">
+                {{ selectedCoin.latest_price.amount.amount }} {{ selectedCoin.latest_price.amount.currency }}
+              </div>
+              <div :class="selectedCoin.percent_change >= 0 ? 'text-green' : 'text-red'">
+                {{ selectedCoin.percent_change >= 0 ? '+' : '' }}{{ (selectedCoin.percent_change * 100).toFixed(2) }}% (24h)
+              </div>
+            </q-card-section>
+          </q-card>
         </div>
-        <div class="text-body1 q-mt-md">{{ selectedCoin.description }}</div>
-      </q-card-section>
 
-      <q-separator />
+        <!-- Capitalização de mercado -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6 text-black">Capitalização de Mercado</div>
+              <div class="text-h4 text-weight-bold text-black">
+                ${{ parseFloat(selectedCoin.market_cap).toLocaleString() }}
+              </div>
+              <div class="text-caption text-grey-8">Dominância: {{ (parseFloat(selectedCoin.dominance) * 100).toFixed(2) }}%</div>
+            </q-card-section>
+          </q-card>
+        </div>
 
-      <q-card-section>
-        <div><strong>Preço Atual:</strong> {{ selectedCoin.latest_price.amount.amount }} {{ selectedCoin.latest_price.amount.currency }}</div>
-        <div><strong>Cap. de Mercado:</strong> {{ selectedCoin.market_cap  }}</div>
-        <div><strong>Volume 24h:</strong> {{ selectedCoin.volume_24h  }}</div>
-        <div><strong>Fornecimento Circulante:</strong> {{ selectedCoin.circulating_supply }}</div>
-        <div><strong>Dominância:</strong> {{ selectedCoin.dominance }}%</div>
-      </q-card-section>
+        <!-- Volume e suprimento -->
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6 text-black">Volume (24h)</div>
+              <div class="text-h4 text-weight-bold text-black">
+                ${{ parseFloat(selectedCoin.volume_24h).toLocaleString() }}
+              </div>
+              <div class="text-caption text-grey-8 q-mt-sm">Suprimento Circulante: {{ parseFloat(selectedCoin.circulating_supply).toLocaleString() }} {{ selectedCoin.symbol }}</div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
 
-      <q-separator />
-
-      <!-- Mudanças de Preço -->
-      <q-card-section>
-        <div><strong>Alteração (última hora):</strong> {{ selectedCoin.latest_price.percent_change.hour }}%</div>
-        <div><strong>Alteração (último dia):</strong> {{ selectedCoin.latest_price.percent_change.day }}%</div>
-        <div><strong>Alteração (última semana):</strong> {{ selectedCoin.latest_price.percent_change.week }}%</div>
-      </q-card-section>
+      <!-- Variação de preço -->
+      <q-card class="q-mb-md">
+        <q-card-section>
+          <div class="text-h6 text-black">Variação de Preço</div>
+          <div class="row">
+            <div class="col-4" v-for="(value, period) in selectedCoin.latest_price.percent_change" :key="period">
+              <div class="text-caption text-grey-8 text-capitalize">{{ period.replace('_', ' ') }}</div>
+              <div :class="value >= 0 ? 'text-green' : 'text-red'">
+                {{ value >= 0 ? '+' : '' }}{{ (value * 100).toFixed(2) }}%
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
 
       <!-- Links úteis -->
-      <q-separator />
-      <q-card-section>
-        <div class="q-mb-md"><strong>Links úteis</strong></div>
-        <q-list>
-          <q-item v-for="resource in selectedCoin.resource_urls" :key="resource.title">
-            <q-item-section>
-              <q-item-label>{{ resource.title }}</q-item-label>
-              <q-item-label><a :href="resource.link" target="_blank">{{ resource.link }}</a></q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-card-section>
-    </q-card>
+      <q-card>
+        <q-card-section>
+          <div class="text-h6 text-black">Links Úteis</div>
+          <div class="row q-col-gutter-md">
+            <div class="col-md-4 col-sm-6 col-xs-12" v-for="resource in selectedCoin.resource_urls" :key="resource.title">
+              <q-card flat bordered>
+                <q-card-section class="row items-center">
+                  <q-avatar size="md" class="q-mr-sm">
+                    <img :src="resource.icon_url" />
+                  </q-avatar>
+                  <div>
+                    <div class="text-subtitle2 text-black">{{ resource.title }}</div>
+                    <a :href="resource.link" target="_blank" class="text-caption text-primary text-black">{{ resource.link }}</a>
+                  </div>
+                </q-card-section>
+              </q-card>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
   </div>
 </template>
+
+
 
 <style scoped>
 .q-item {
@@ -111,5 +169,19 @@ onMounted(() => {
 
 .q-item:hover {
   background-color: #f8f9fa;
+}
+
+a {
+  text-decoration: none;
+  word-break: break-all;
+  color: #000000 !important;
+}
+
+.text-black {
+  color: #000000;
+}
+
+.text-grey-8 {
+  color: #616161;
 }
 </style>
