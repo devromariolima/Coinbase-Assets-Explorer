@@ -41,3 +41,7 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 - Push para a branch (git push origin feature/AmazingFeature)
 
 - Abra um Pull Request
+
+## 🌐 Deploy
+
+🔗 Deploy: [Veja o Projeto](https://coinbase-assets-explorer.vercel.app/cryptocurrencies)
