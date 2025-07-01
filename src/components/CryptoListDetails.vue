@@ -43,24 +43,9 @@ onMounted(() => {
 
     <!-- Exibição do loading -->
     <div v-if="loading" class="q-gutter-y-md q-mt-md">
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
-      <q-skeleton height="100px" />
+      <q-skeleton height="50px" />
+      <q-skeleton height="50px" />
+      <q-skeleton height="50px" />
     </div>
 
     <!-- Banner caso não encontre a criptomoeda -->
