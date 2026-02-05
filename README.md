@@ -42,6 +42,10 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 
 - Abra um Pull Request
 
+## 🌐 iniciar o pŕojeto local
+
+- npm run dev
+
 ## 🌐 Deploy
 
 🔗 Deploy: [Veja o Projeto](https://coinbase-assets-explorer.vercel.app/cryptocurrencies)
