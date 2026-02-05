@@ -48,4 +48,6 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 
 ## 🌐 Deploy
 
+<img src="https://i.imgur.com/nmI5juR.png" alt="Desktop Screenshot" width="600"/>
+
 🔗 Deploy: [Veja o Projeto](https://coinbase-assets-explorer.vercel.app/cryptocurrencies)
