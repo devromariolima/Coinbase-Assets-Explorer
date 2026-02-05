@@ -11,18 +11,16 @@ interface Props {
   showFavorites?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const _props = withDefaults(defineProps<Props>(), {
   showHeader: true,
   showFooter: true,
   showMenuButton: true,
   showFavorites: true
 })
 
-// Inicialização
 const $q = useQuasar()
 const route = useRoute()
 
-// Estados
 const leftDrawerOpen = ref(false)
 const globalLoading = ref(false)
 const backgroundIntensity = ref(3)
@@ -81,7 +79,6 @@ watch(
       </transition>
     </q-page-container>
 
-    <!-- Footer (opcional) -->
     <q-footer v-if="showFooter" bordered class="bg-grey-8 text-white">
       <q-toolbar>
         <q-toolbar-title class="text-caption">
