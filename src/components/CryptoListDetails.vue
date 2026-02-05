@@ -433,7 +433,7 @@ onMounted(() => {
                         <q-icon name="trending_up" color="primary" class="q-mr-sm" />
                         <div class="col">
                           <div class="text-caption text-grey-7">Market Cap</div>
-                          <div class="text-h6 text-weight-bold q-mt-xs">
+                          <div class="text-h6 text-grey-7 q-mt-xs">
                             {{ coinMarketCap }}
                           </div>
                         </div>
@@ -453,7 +453,7 @@ onMounted(() => {
                         <q-icon name="bar_chart" color="orange" class="q-mr-sm" />
                         <div class="col">
                           <div class="text-caption text-grey-7">Volume (24h)</div>
-                          <div class="text-h6 text-weight-bold q-mt-xs">
+                          <div class="text-h6 text-grey-7 q-mt-xs">
                             {{ coinVolume }}
                           </div>
                         </div>
@@ -473,7 +473,7 @@ onMounted(() => {
                         <q-icon name="account_balance_wallet" color="green" class="q-mr-sm" />
                         <div class="col">
                           <div class="text-caption text-grey-7">Supply Circulante</div>
-                          <div class="text-h6 text-weight-bold q-mt-xs">
+                          <div class="text-h6 text-grey-7 q-mt-xs">
                             {{ coinSupply }}
                           </div>
                         </div>
@@ -493,7 +493,7 @@ onMounted(() => {
                         <q-icon name="show_chart" color="blue" class="q-mr-sm" />
                         <div class="col">
                           <div class="text-caption text-grey-7">ATH (All Time High)</div>
-                          <div class="text-h6 text-weight-bold q-mt-xs">
+                          <div class="text-h6 text-grey-7 q-mt-xs">
                             {{ formatCurrency(parseFloat(selectedCoin.latest_price?.amount?.amount || '0') * 1.5) }}
                           </div>
                         </div>
