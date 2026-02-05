@@ -11,7 +11,8 @@ interface Props {
   showFavorites?: boolean
 }
 
-const _props = withDefaults(defineProps<Props>(), {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = withDefaults(defineProps<Props>(), {
   showHeader: true,
   showFooter: true,
   showMenuButton: true,
