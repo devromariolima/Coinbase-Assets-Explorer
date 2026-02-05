@@ -511,7 +511,7 @@ onMounted(() => {
             <div class="description-section q-pb-lg">
               <q-card flat bordered>
                 <q-card-section>
-                  <div class="text-h6 text-weight-bold q-mb-md">
+                  <div class="text-h6 text-grey-7 q-mb-md">
                     <q-icon name="description" color="primary" class="q-mr-sm" />
                     Sobre {{ selectedCoin.name }}
                   </div>
@@ -530,7 +530,7 @@ onMounted(() => {
             <div class="performance-section q-pb-lg">
               <q-card flat bordered>
                 <q-card-section>
-                  <div class="text-h6 text-weight-bold q-mb-md">
+                  <div class="text-h6 text-grey-7 q-mb-md">
                     <q-icon name="trending_up" color="primary" class="q-mr-sm" />
                     Variações de Preço
                   </div>
@@ -570,7 +570,7 @@ onMounted(() => {
             <div class="technical-section q-pb-lg">
               <q-card flat bordered>
                 <q-card-section>
-                  <div class="text-h6 text-weight-bold q-mb-md">
+                  <div class="text-h6 text-grey-7 q-mb-md">
                     <q-icon name="precision_manufacturing" color="primary" class="q-mr-sm" />
                     Informações Técnicas
                   </div>
@@ -590,7 +590,7 @@ onMounted(() => {
                         <q-separator />
                         <div class="row items-center justify-between">
                           <span class="text-grey-7">Transaction Scale</span>
-                          <span class="text-weight-medium">{{ selectedCoin.transaction_unit_price_scale || 'N/A' }}</span>
+                          <span class="text-grey-7">{{ selectedCoin.transaction_unit_price_scale || 'N/A' }}</span>
                         </div>
                       </div>
                     </div>
@@ -599,8 +599,8 @@ onMounted(() => {
                       <div class="q-gutter-y-md">
                         <div class="row items-center">
                           <div class="color-indicator q-mr-sm" :style="{ backgroundColor: coinColor }"></div>
-                          <span class="text-grey-7">Cor Principal</span>
-                          <span class="text-weight-medium q-ml-auto">{{ coinColor }}</span>
+                          <span class=" text-grey-7">Cor Principal</span>
+                          <span class="text-grey-7 q-ml-auto">{{ coinColor }}</span>
                         </div>
                         <q-separator />
                         <div class="row items-center justify-between">
@@ -633,7 +633,7 @@ onMounted(() => {
             <div class="details-section q-pb-lg">
               <q-card flat bordered>
                 <q-card-section>
-                  <div class="text-h6 text-weight-bold q-mb-md">
+                  <div class="text-h6 text-grey-7 q-mb-md">
                     <q-icon name="info" color="primary" class="q-mr-sm" />
                     Detalhes da Criptomoeda
                   </div>
@@ -643,17 +643,17 @@ onMounted(() => {
                       <div class="q-gutter-y-md">
                         <div>
                           <div class="text-caption text-grey-7 q-mb-xs">ID</div>
-                          <div class="text-weight-medium monospace">{{ selectedCoin.id }}</div>
+                          <div class="text-grey-7 monospace">{{ selectedCoin.id }}</div>
                         </div>
                         <q-separator />
                         <div>
                           <div class="text-caption text-grey-7 q-mb-xs">Slug</div>
-                          <div class="text-weight-medium">{{ selectedCoin.slug }}</div>
+                          <div class="text-grey-7">{{ selectedCoin.slug }}</div>
                         </div>
                         <q-separator />
                         <div>
                           <div class="text-caption text-grey-7 q-mb-xs">Base/Currency</div>
-                          <div class="text-weight-medium">{{ selectedCoin.base }} / {{ selectedCoin.currency }}</div>
+                          <div class="text-grey-7">{{ selectedCoin.base }} / {{ selectedCoin.currency }}</div>
                         </div>
                       </div>
                     </div>
@@ -662,12 +662,12 @@ onMounted(() => {
                       <div class="q-gutter-y-md">
                         <div v-if="selectedCoin.address_regex">
                           <div class="text-caption text-grey-7 q-mb-xs">Regex de Endereço</div>
-                          <div class="text-weight-medium monospace small-text">{{ selectedCoin.address_regex }}</div>
+                          <div class="text-grey-7 monospace small-text">{{ selectedCoin.address_regex }}</div>
                         </div>
                         <q-separator v-if="selectedCoin.address_regex" />
                         <div>
                           <div class="text-caption text-grey-7 q-mb-xs">Data de Coleta</div>
-                          <div class="text-weight-medium">{{ 
+                          <div class="text-grey-7">{{ 
                             new Date().toLocaleDateString('pt-BR', { 
                               day: '2-digit', 
                               month: '2-digit', 
@@ -678,7 +678,7 @@ onMounted(() => {
                         <q-separator />
                         <div>
                           <div class="text-caption text-grey-7 q-mb-xs">Fonte dos Dados</div>
-                          <div class="text-weight-medium">Coinbase API</div>
+                          <div class="text-grey-7">Coinbase API</div>
                         </div>
                       </div>
                     </div>
@@ -690,7 +690,7 @@ onMounted(() => {
             <div class="advanced-stats q-pb-lg">
               <q-card flat bordered>
                 <q-card-section>
-                  <div class="text-h6 text-weight-bold q-mb-md">
+                  <div class="text-h6 text-grey-7 q-mb-md">
                     <q-icon name="insights" color="primary" class="q-mr-sm" />
                     Estatísticas Avançadas
                   </div>
@@ -699,7 +699,7 @@ onMounted(() => {
                     <div class="col-12 col-sm-6">
                       <div class="stat-item q-pa-md bg-grey-1 rounded-borders">
                         <div class="text-caption text-grey-7">Volume/Market Cap Ratio</div>
-                        <div class="text-h6 text-weight-bold">{{ calculateVolumeRatio }}%</div>
+                        <div class="text-h6 text-grey-7">{{ calculateVolumeRatio }}%</div>
                         <div class="text-caption text-grey-7 q-mt-xs">
                           <q-icon 
                             :name="parseFloat(calculateVolumeRatio) > 5 ? 'trending_up' : 'trending_down'"
@@ -714,7 +714,7 @@ onMounted(() => {
                     <div class="col-12 col-sm-6">
                       <div class="stat-item q-pa-md bg-grey-1 rounded-borders">
                         <div class="text-caption text-grey-7">Dias desde o Lançamento</div>
-                        <div class="text-h6 text-weight-bold">{{ getDaysSinceLaunch }}</div>
+                        <div class="text-h6 text-grey-7">{{ getDaysSinceLaunch }}</div>
                         <div class="text-caption text-grey-7 q-mt-xs">
                           <q-icon 
                             name="calendar_today"
@@ -737,7 +737,7 @@ onMounted(() => {
             <div class="resources-section q-pb-xl">
               <q-card flat bordered>
                 <q-card-section>
-                  <div class="text-h6 text-weight-bold q-mb-md">
+                  <div class="text-h6 text-grey-7 q-mb-md">
                     <q-icon name="link" color="primary" class="q-mr-sm" />
                     Links e Recursos
                   </div>
@@ -765,7 +765,7 @@ onMounted(() => {
                               <q-icon v-else name="public" color="primary" />
                             </q-avatar>
                             <div class="col">
-                              <div class="text-subtitle2 text-weight-medium">
+                              <div class="text-subtitle2 text-grey-7">
                                 {{ resource.title }}
                               </div>
                               <div class="text-caption text-grey-7 ellipsis">
