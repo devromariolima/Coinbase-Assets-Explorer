@@ -38,7 +38,7 @@ onMounted(() => getData())
   <q-page padding class="bg-grey-2 justify-center" style="min-height: 100vh;">
     <div class="col-12 col-md-8 col-lg-6">
       <div class="text-h5 text-weight-bold text-black q-mb-md text-center">
-        Coinbase Assets Explorer
+         COINBASE EXPLORER
       </div>
 
       <q-input
