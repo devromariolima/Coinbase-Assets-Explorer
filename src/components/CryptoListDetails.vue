@@ -644,7 +644,6 @@ onMounted(() => {
                     <div class="col-12 col-sm-6">
                       <div class="stat-item q-pa-md bg-grey-1 rounded-borders">
                         <div class="text-caption text-grey-7">Dias desde o Lançamento</div>
-                        <div class="text-h6 text-grey-7">{{ getDaysSinceLaunch }}</div>
                         <div class="text-caption text-grey-7 q-mt-xs">
                           <q-icon name="calendar_today" color="primary" size="xs" />
                           Projetado em {{ formatDate(selectedCoin.launched_at || '') }}
