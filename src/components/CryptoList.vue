@@ -245,40 +245,6 @@ onMounted(() => {
             </template>
           </q-input>
         </div>
-        
-        <div class="col-12 col-md-6">
-          <div class="row items-center q-col-gutter-sm">
-            <div class="col-auto text-grey-7">Ordenar por:</div>
-            <div class="col">
-              <q-select
-                v-model="sortBy"
-                :options="[
-                  { label: 'Rank', value: 'rank' },
-                  { label: 'Nome', value: 'name' },
-                  { label: 'Símbolo', value: 'symbol' },
-                  { label: 'Preço', value: 'price' },
-                  { label: 'Market Cap', value: 'market_cap' },
-                  { label: 'Variação 24h', value: 'change' }
-                ]"
-                option-label="label"
-                option-value="value"
-                dense
-                borderless
-                emit-value
-                map-options
-              />
-            </div>
-            <div class="col-auto">
-              <q-btn
-                flat
-                round
-                :icon="sortOrder === 'asc' ? 'arrow_upward' : 'arrow_downward'"
-                @click="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'"
-                size="sm"
-              />
-            </div>
-          </div>
-        </div>
       </div>
       
       <div class="row items-center justify-between q-mt-md">
@@ -428,7 +394,6 @@ onMounted(() => {
               </div>
             </q-card-section>
             
-            <!-- Card Footer -->
             <q-card-actions class="card-footer">
               <q-btn
                 flat
@@ -617,7 +582,6 @@ onMounted(() => {
   }
 }
 
-// Animations
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -633,7 +597,6 @@ onMounted(() => {
   animation: fadeIn 0.5s ease-out;
 }
 
-// Staggered animation for grid items
 .crypto-grid .crypto-card:nth-child(1) { animation-delay: 0.1s; }
 .crypto-grid .crypto-card:nth-child(2) { animation-delay: 0.2s; }
 .crypto-grid .crypto-card:nth-child(3) { animation-delay: 0.3s; }
@@ -647,7 +610,6 @@ onMounted(() => {
 .crypto-grid .crypto-card:nth-child(11) { animation-delay: 1.1s; }
 .crypto-grid .crypto-card:nth-child(12) { animation-delay: 1.2s; }
 
-// Loading skeleton animation
 @keyframes shimmer {
   0% {
     background-position: -1000px 0;
