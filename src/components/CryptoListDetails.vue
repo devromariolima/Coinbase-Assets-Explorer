@@ -1,13 +1,13 @@
-<!-- src/views/CryptoDetailView.vue -->
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCryptocurrenciesStore } from '../store/cryptocurrencies-Store'
 import { useQuasar } from 'quasar'
 import type { CryptoCurrency } from '../types/CoinBaseId'
 
 const $q = useQuasar()
 const route = useRoute()
+const router = useRouter()
 
 const loading = ref<boolean>(true)
 const refreshing = ref<boolean>(false)
@@ -109,10 +109,10 @@ const getProgressColor = (value: number) => {
 
 const toggleFavorite = () => {
   if (!selectedCoin.value) return
-  
+
   isFavorited.value = !isFavorited.value
   const favorites = JSON.parse(localStorage.getItem('crypto_favorites') || '[]')
-  
+
   if (isFavorited.value) {
     if (!favorites.includes(selectedCoin.value.symbol)) {
       favorites.push(selectedCoin.value.symbol)
@@ -133,19 +133,19 @@ const toggleFavorite = () => {
       icon: 'favorite_border'
     })
   }
-  
+
   localStorage.setItem('crypto_favorites', JSON.stringify(favorites))
 }
 
 const shareCrypto = async () => {
   if (!selectedCoin.value) return
-  
+
   const shareData = {
     title: `${selectedCoin.value.name} (${selectedCoin.value.symbol})`,
     text: `Confira os dados de ${selectedCoin.value.name} no Crypto Explorer`,
     url: window.location.href
   }
-  
+
   if (navigator.share) {
     try {
       await navigator.share(shareData)
@@ -164,11 +164,11 @@ const shareCrypto = async () => {
 
 const refreshData = async () => {
   if (!route.params.symbol) return
-  
+
   refreshing.value = true
   await getDataByid(route.params.symbol as string)
   refreshing.value = false
-  
+
   $q.notify({
     message: 'Dados atualizados com sucesso!',
     color: 'positive',
@@ -180,11 +180,11 @@ async function getDataByid(symbol: string) {
   try {
     loading.value = true
     await useStore.GetCryptocurrenciesByid(symbol)
-    
+
     const coin = useStore.Coinbase.find(c => c.symbol === symbol)
     if (coin) {
       selectedCoin.value = coin
-      
+
       const favorites = JSON.parse(localStorage.getItem('crypto_favorites') || '[]')
       isFavorited.value = favorites.includes(symbol)
     }
@@ -239,6 +239,14 @@ const coinColor = computed(() => {
   return selectedCoin.value?.color || '#667eea'
 })
 
+const goBack = () => {
+  if (window.history.length > 1) {
+    router.go(-1)
+  } else {
+    router.push({ name: 'cryptocurrencies.listar' })
+  }
+}
+
 onMounted(() => {
   const symbol = route.params.symbol as string
   if (symbol) {
@@ -251,30 +259,25 @@ onMounted(() => {
   <q-page class="crypto-detail-page">
     <div class="crypto-header" :class="{ loading: loading }">
       <div class="header-overlay"></div>
-      
-      <q-btn 
+
+        <q-btn 
         icon="arrow_back" 
         flat 
         round 
         color="white" 
         class="back-btn"
-        @click="$router.go(-1)"
+        @click="goBack"
       />
-      
-      <!-- Conteúdo do Header -->
+
       <div class="header-content q-px-lg">
         <div class="row items-center q-col-gutter-lg">
           <div class="col-auto">
             <q-avatar size="80px" class="crypto-avatar" :style="{ borderColor: coinColor }">
-              <img 
-                v-if="selectedCoin?.image_url" 
-                :src="selectedCoin.image_url" 
-                :alt="selectedCoin?.name"
-              />
+              <img v-if="selectedCoin?.image_url" :src="selectedCoin.image_url" :alt="selectedCoin?.name" />
               <q-icon v-else name="payments" size="xl" />
             </q-avatar>
           </div>
-          
+
           <div class="col">
             <div class="row items-center q-col-gutter-sm">
               <div class="text-h4 text-white text-weight-bold">
@@ -284,29 +287,18 @@ onMounted(() => {
                 {{ selectedCoin?.symbol }}
               </div>
               <div class="row items-center q-gutter-sm">
-                <q-chip 
-                  v-if="selectedCoin?.rank"
-                  size="sm"
-                  color="primary"
-                  text-color="white"
-                  class="rank-chip"
-                >
+                <q-chip v-if="selectedCoin?.rank" size="sm" color="primary" text-color="white" class="rank-chip">
                   #{{ selectedCoin.rank }}
                 </q-chip>
-                
-                <q-chip 
-                  v-if="selectedCoin?.listed !== false"
-                  size="sm"
-                  color="green"
-                  text-color="white"
-                  icon="check_circle"
-                >
+
+                <q-chip v-if="selectedCoin?.listed !== false" size="sm" color="green" text-color="white"
+                  icon="check_circle">
                   Listado
                 </q-chip>
-                
+
               </div>
             </div>
-            
+
             <div class="text-caption text-white-7 q-mt-xs">
               <q-icon name="calendar_today" size="xs" class="q-mr-xs" />
               {{ formatDate(selectedCoin?.launched_at || '') }}
@@ -315,38 +307,18 @@ onMounted(() => {
               </span>
             </div>
           </div>
-          
+
           <div class="col-auto" v-if="!loading">
             <div class="row q-gutter-sm">
-              <q-btn 
-                round 
-                :color="isFavorited ? 'pink' : 'white'" 
-                :text-color="isFavorited ? 'white' : 'dark'"
-                :icon="isFavorited ? 'favorite' : 'favorite_border'"
-                @click="toggleFavorite"
-                size="md"
-              />
-              <q-btn 
-                round 
-                color="white" 
-                text-color="dark"
-                icon="share"
-                @click="shareCrypto"
-                size="md"
-              />
-              <q-btn 
-                round 
-                color="white" 
-                text-color="dark"
-                icon="refresh"
-                @click="refreshData"
-                :loading="refreshing"
-                size="md"
-              />
+              <q-btn round :color="isFavorited ? 'pink' : 'white'" :text-color="isFavorited ? 'white' : 'dark'"
+                :icon="isFavorited ? 'favorite' : 'favorite_border'" @click="toggleFavorite" size="md" />
+              <q-btn round color="white" text-color="dark" icon="share" @click="shareCrypto" size="md" />
+              <q-btn round color="white" text-color="dark" icon="refresh" @click="refreshData" :loading="refreshing"
+                size="md" />
             </div>
           </div>
         </div>
-        
+
         <div v-if="selectedCoin?.latest_price" class="price-display q-mt-xl">
           <div class="row items-end q-col-gutter-md">
             <div class="col-auto">
@@ -354,23 +326,18 @@ onMounted(() => {
                 {{ coinPrice }}
               </div>
               <div class="row items-center q-mt-sm">
-                <q-chip 
-                  :color="getChangeColor(selectedCoin.percent_change)"
-                  text-color="white"
-                  :icon="getChangeIcon(selectedCoin.percent_change)"
-                  size="md"
-                  class="q-mr-sm"
-                >
+                <q-chip :color="getChangeColor(selectedCoin.percent_change)" text-color="white"
+                  :icon="getChangeIcon(selectedCoin.percent_change)" size="md" class="q-mr-sm">
                   {{ formatPercent(selectedCoin.percent_change) }}
                 </q-chip>
                 <span class="text-caption text-white-7">nas últimas 24h</span>
               </div>
             </div>
-            
+
             <div class="col">
               <div class="text-caption text-white-7">
-                Última atualização: {{ 
-                  new Date(selectedCoin.latest_price.timestamp).toLocaleTimeString('pt-BR') 
+                Última atualização: {{
+                  new Date(selectedCoin.latest_price.timestamp).toLocaleTimeString('pt-BR')
                 }}
               </div>
             </div>
@@ -379,7 +346,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Loading State -->
     <div v-if="loading" class="loading-container q-pa-xl">
       <div class="text-center">
         <q-spinner-gears color="primary" size="3em" />
@@ -387,29 +353,19 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Error State -->
-    <q-banner 
-      v-else-if="!loading && !selectedCoin"
-      class="bg-negative text-white q-ma-lg"
-    >
+    <q-banner v-else-if="!loading && !selectedCoin" class="bg-negative text-white q-ma-lg">
       <template v-slot:avatar>
         <q-icon name="error" />
       </template>
       Não foi possível encontrar os dados da criptomoeda.
       <template v-slot:action>
-        <q-btn flat color="white" label="Voltar" @click="$router.go(-1)" />
+        <q-btn flat color="white" label="Voltar" @click="goBack" />
       </template>
     </q-banner>
 
     <div v-if="selectedCoin && !loading" class="content-container">
       <div class="tabs-container q-px-lg q-pt-lg">
-        <q-tabs
-          v-model="activeTab"
-          inline-label
-          class="text-primary"
-          indicator-color="primary"
-          active-color="primary"
-        >
+        <q-tabs v-model="activeTab" inline-label class="text-primary" indicator-color="primary" active-color="primary">
           <q-tab name="overview" icon="dashboard" label="Visão Geral" />
           <q-tab name="performance" icon="trending_up" label="Performance" />
           <q-tab name="details" icon="info" label="Detalhes" />
@@ -417,22 +373,18 @@ onMounted(() => {
         </q-tabs>
       </div>
 
-      <!-- Visão Geral -->
       <q-tab-panels v-model="activeTab" animated class="tab-panels">
-        <!-- Aba: Visão Geral -->
         <q-tab-panel name="overview">
           <div class="q-px-lg">
-            <!-- Métricas Principais -->
             <div class="metrics-grid q-pb-lg">
               <div class="row q-col-gutter-lg">
-                <!-- Market Cap -->
                 <div class="col-12 col-sm-6 col-md-3">
                   <q-card class="metric-card" flat bordered>
                     <q-card-section>
                       <div class="row items-center no-wrap">
                         <q-icon name="trending_up" color="primary" class="q-mr-sm" />
                         <div class="col">
-                          <div class="text-caption text-grey-7">Market Cap</div>
+                          <div class="text-caption text-grey-7">Valor de mercado</div>
                           <div class="text-h6 text-grey-7 q-mt-xs">
                             {{ coinMarketCap }}
                           </div>
@@ -445,7 +397,6 @@ onMounted(() => {
                   </q-card>
                 </div>
 
-                <!-- Volume 24h -->
                 <div class="col-12 col-sm-6 col-md-3">
                   <q-card class="metric-card" flat bordered>
                     <q-card-section>
@@ -465,14 +416,13 @@ onMounted(() => {
                   </q-card>
                 </div>
 
-                <!-- Supply -->
                 <div class="col-12 col-sm-6 col-md-3">
                   <q-card class="metric-card" flat bordered>
                     <q-card-section>
                       <div class="row items-center no-wrap">
                         <q-icon name="account_balance_wallet" color="green" class="q-mr-sm" />
                         <div class="col">
-                          <div class="text-caption text-grey-7">Supply Circulante</div>
+                          <div class="text-caption text-grey-7">Fornecimento Circulante</div>
                           <div class="text-h6 text-grey-7 q-mt-xs">
                             {{ coinSupply }}
                           </div>
@@ -485,14 +435,13 @@ onMounted(() => {
                   </q-card>
                 </div>
 
-                <!-- Preço Máximo/ Mínimo (simulado) -->
                 <div class="col-12 col-sm-6 col-md-3">
                   <q-card class="metric-card" flat bordered>
                     <q-card-section>
                       <div class="row items-center no-wrap">
                         <q-icon name="show_chart" color="blue" class="q-mr-sm" />
                         <div class="col">
-                          <div class="text-caption text-grey-7">ATH (All Time High)</div>
+                          <div class="text-caption text-grey-7">ATH (Melhor marca de todos os tempos)</div>
                           <div class="text-h6 text-grey-7 q-mt-xs">
                             {{ formatCurrency(parseFloat(selectedCoin.latest_price?.amount?.amount || '0') * 1.5) }}
                           </div>
@@ -507,7 +456,6 @@ onMounted(() => {
               </div>
             </div>
 
-            <!-- Descrição -->
             <div class="description-section q-pb-lg">
               <q-card flat bordered>
                 <q-card-section>
@@ -518,7 +466,7 @@ onMounted(() => {
                   <div class="description-text">
                     {{ selectedCoin.description }}
                   </div>
-                
+
                 </q-card-section>
               </q-card>
             </div>
@@ -534,30 +482,20 @@ onMounted(() => {
                     <q-icon name="trending_up" color="primary" class="q-mr-sm" />
                     Variações de Preço
                   </div>
-                  
+
                   <div class="price-changes-grid">
                     <div class="row q-col-gutter-md">
-                      <div 
-                        v-for="(value, period) in percentChanges" 
-                        :key="period"
-                        class="col-6 col-sm-4 col-md-3"
-                      >
+                      <div v-for="(value, period) in percentChanges" :key="period" class="col-6 col-sm-4 col-md-3">
                         <q-card class="change-card" flat bordered>
                           <q-card-section class="text-center">
                             <div class="text-caption text-grey-7">
                               {{ formatPeriod(period) }}
                             </div>
-                            <div 
-                              :class="getChangeClass(value)"
-                              class="text-h6 text-weight-bold q-mt-sm"
-                            >
+                            <div :class="getChangeClass(value)" class="text-h6 text-weight-bold q-mt-sm">
                               {{ formatPercent(value) }}
                             </div>
-                            <q-linear-progress 
-                              :value="Math.abs(value)" 
-                              :color="getProgressColor(value)"
-                              class="q-mt-sm"
-                            />
+                            <q-linear-progress :value="Math.abs(value)" :color="getProgressColor(value)"
+                              class="q-mt-sm" />
                           </q-card-section>
                         </q-card>
                       </div>
@@ -574,7 +512,7 @@ onMounted(() => {
                     <q-icon name="precision_manufacturing" color="primary" class="q-mr-sm" />
                     Informações Técnicas
                   </div>
-                  
+
                   <div class="row q-col-gutter-md">
                     <div class="col-12 col-md-6">
                       <div class="q-gutter-y-md">
@@ -594,7 +532,7 @@ onMounted(() => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div class="col-12 col-md-6">
                       <div class="q-gutter-y-md">
                         <div class="row items-center">
@@ -605,12 +543,7 @@ onMounted(() => {
                         <q-separator />
                         <div class="row items-center justify-between">
                           <span class="text-grey-7">Status</span>
-                          <q-chip 
-                            v-if="selectedCoin.listed !== false"
-                            size="sm"
-                            color="green"
-                            text-color="white"
-                          >
+                          <q-chip v-if="selectedCoin.listed !== false" size="sm" color="green" text-color="white">
                             Ativo
                           </q-chip>
                           <q-chip v-else size="sm" color="orange" text-color="white">
@@ -637,7 +570,7 @@ onMounted(() => {
                     <q-icon name="info" color="primary" class="q-mr-sm" />
                     Detalhes da Criptomoeda
                   </div>
-                  
+
                   <div class="row q-col-gutter-lg">
                     <div class="col-12 col-md-6">
                       <div class="q-gutter-y-md">
@@ -657,7 +590,7 @@ onMounted(() => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div class="col-12 col-md-6">
                       <div class="q-gutter-y-md">
                         <div v-if="selectedCoin.address_regex">
@@ -667,12 +600,12 @@ onMounted(() => {
                         <q-separator v-if="selectedCoin.address_regex" />
                         <div>
                           <div class="text-caption text-grey-7 q-mb-xs">Data de Coleta</div>
-                          <div class="text-grey-7">{{ 
-                            new Date().toLocaleDateString('pt-BR', { 
-                              day: '2-digit', 
-                              month: '2-digit', 
-                              year: 'numeric' 
-                            }) 
+                          <div class="text-grey-7">{{
+                            new Date().toLocaleDateString('pt-BR', {
+                              day: '2-digit',
+                              month: '2-digit',
+                              year: 'numeric'
+                            })
                           }}</div>
                         </div>
                         <q-separator />
@@ -694,33 +627,26 @@ onMounted(() => {
                     <q-icon name="insights" color="primary" class="q-mr-sm" />
                     Estatísticas Avançadas
                   </div>
-                  
+
                   <div class="row q-col-gutter-md">
                     <div class="col-12 col-sm-6">
                       <div class="stat-item q-pa-md bg-grey-1 rounded-borders">
                         <div class="text-caption text-grey-7">Volume/Market Cap Ratio</div>
                         <div class="text-h6 text-grey-7">{{ calculateVolumeRatio }}%</div>
                         <div class="text-caption text-grey-7 q-mt-xs">
-                          <q-icon 
-                            :name="parseFloat(calculateVolumeRatio) > 5 ? 'trending_up' : 'trending_down'"
-                            :color="parseFloat(calculateVolumeRatio) > 5 ? 'positive' : 'negative'"
-                            size="xs"
-                          />
+                          <q-icon :name="parseFloat(calculateVolumeRatio) > 5 ? 'trending_up' : 'trending_down'"
+                            :color="parseFloat(calculateVolumeRatio) > 5 ? 'positive' : 'negative'" size="xs" />
                           {{ parseFloat(calculateVolumeRatio) > 5 ? 'Alta' : 'Baixa' }} liquidez
                         </div>
                       </div>
                     </div>
-                    
+
                     <div class="col-12 col-sm-6">
                       <div class="stat-item q-pa-md bg-grey-1 rounded-borders">
                         <div class="text-caption text-grey-7">Dias desde o Lançamento</div>
                         <div class="text-h6 text-grey-7">{{ getDaysSinceLaunch }}</div>
                         <div class="text-caption text-grey-7 q-mt-xs">
-                          <q-icon 
-                            name="calendar_today"
-                            color="primary"
-                            size="xs"
-                          />
+                          <q-icon name="calendar_today" color="primary" size="xs" />
                           Projetado em {{ formatDate(selectedCoin.launched_at || '') }}
                         </div>
                       </div>
@@ -741,27 +667,14 @@ onMounted(() => {
                     <q-icon name="link" color="primary" class="q-mr-sm" />
                     Links e Recursos
                   </div>
-                  
+
                   <div v-if="coinResources.length > 0" class="row q-col-gutter-lg">
-                    <div 
-                      v-for="(resource, index) in coinResources" 
-                      :key="index"
-                      class="col-12 col-md-6"
-                    >
-                      <a 
-                        :href="resource.link" 
-                        target="_blank" 
-                        class="resource-link"
-                        :title="resource.title"
-                      >
+                    <div v-for="(resource, index) in coinResources" :key="index" class="col-12 col-md-6">
+                      <a :href="resource.link" target="_blank" class="resource-link" :title="resource.title">
                         <q-card class="resource-card" hoverable>
                           <q-card-section class="row items-center">
                             <q-avatar size="40px" class="q-mr-md">
-                              <img 
-                                v-if="resource.icon_url" 
-                                :src="resource.icon_url" 
-                                :alt="resource.title"
-                              />
+                              <img v-if="resource.icon_url" :src="resource.icon_url" :alt="resource.title" />
                               <q-icon v-else name="public" color="primary" />
                             </q-avatar>
                             <div class="col">
@@ -778,7 +691,7 @@ onMounted(() => {
                       </a>
                     </div>
                   </div>
-                  
+
                   <div v-else class="text-center q-py-xl">
                     <q-icon name="link_off" size="xl" color="grey-5" class="q-mb-md" />
                     <div class="text-h6 text-grey-7">Nenhum recurso disponível</div>
@@ -786,26 +699,14 @@ onMounted(() => {
                       Esta criptomoeda não possui links ou recursos adicionais
                     </div>
                   </div>
-                  
+
                   <div class="q-mt-lg">
                     <div class="text-caption text-grey-7 q-mb-sm">Links Úteis</div>
                     <div class="row q-gutter-sm">
-                      <q-btn 
-                        color="primary" 
-                        outline 
-                        icon="search"
-                        label="Explorar no Coinbase"
-                        :href="`https://www.coinbase.com/price/${selectedCoin.slug}`"
-                        target="_blank"
-                      />
-                      <q-btn 
-                        color="grey-7" 
-                        outline 
-                        icon="code"
-                        label="Documentação da API"
-                        href="https://developers.coinbase.com/api/v2"
-                        target="_blank"
-                      />
+                      <q-btn color="primary" outline icon="search" label="Explorar no Coinbase"
+                        :href="`https://www.coinbase.com/price/${selectedCoin.slug}`" target="_blank" />
+                      <q-btn color="grey-7" outline icon="code" label="Documentação da API"
+                        href="https://developers.coinbase.com/api/v2" target="_blank" />
                     </div>
                   </div>
                 </q-card-section>
@@ -830,11 +731,11 @@ onMounted(() => {
   padding: 40px 0 100px;
   margin-bottom: -60px;
   transition: background 0.5s ease;
-  
+
   &.loading {
     min-height: 300px;
   }
-  
+
   .header-overlay {
     position: absolute;
     top: 0;
@@ -843,26 +744,26 @@ onMounted(() => {
     bottom: 0;
     background: rgba(0, 0, 0, 0.3);
   }
-  
+
   .back-btn {
     position: absolute;
     top: 20px;
     left: 20px;
     z-index: 1;
   }
-  
+
   .header-content {
     position: relative;
     z-index: 1;
   }
-  
+
   .crypto-avatar {
     border: 4px solid;
     background: white;
     padding: 8px;
     transition: border-color 0.3s ease;
   }
-  
+
   .price-display {
     .q-chip {
       font-weight: 600;
@@ -880,7 +781,7 @@ onMounted(() => {
   background: white;
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-  
+
   .q-tabs {
     border-bottom: 1px solid #e0e0e0;
   }
@@ -895,12 +796,12 @@ onMounted(() => {
   border-radius: 12px;
   transition: all 0.3s ease;
   border: 1px solid #e0e0e0;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   }
-  
+
   .q-card-section {
     padding: 20px;
   }
@@ -915,7 +816,7 @@ onMounted(() => {
   .q-card {
     border-radius: 16px;
     border: 1px solid #e0e0e0;
-    
+
     .q-card-section {
       padding: 28px;
     }
@@ -931,11 +832,11 @@ onMounted(() => {
 .change-card {
   border-radius: 12px;
   transition: all 0.3s ease;
-  
+
   &:hover {
     transform: translateY(-2px);
   }
-  
+
   .q-linear-progress {
     height: 6px;
     border-radius: 3px;
@@ -951,7 +852,7 @@ onMounted(() => {
 
 .stat-item {
   transition: all 0.3s ease;
-  
+
   &:hover {
     background: #e8eaf6 !important;
   }
@@ -961,7 +862,7 @@ onMounted(() => {
   text-decoration: none;
   color: inherit;
   display: block;
-  
+
   &:hover {
     .resource-card {
       border-color: v-bind('coinColor');
@@ -969,12 +870,12 @@ onMounted(() => {
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     }
   }
-  
+
   .resource-card {
     border-radius: 12px;
     transition: all 0.3s ease;
     border: 1px solid #e0e0e0;
-    
+
     .ellipsis {
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1014,29 +915,29 @@ onMounted(() => {
 @media (max-width: 600px) {
   .crypto-header {
     padding: 20px 0 80px;
-    
+
     .header-content {
       padding-left: 16px;
       padding-right: 16px;
     }
-    
+
     .crypto-avatar {
       size: 60px;
     }
-    
+
     .price-display {
       .text-h2 {
         font-size: 2.5rem;
       }
     }
   }
-  
+
   .tabs-container,
   .tab-panels .q-px-lg {
     padding-left: 16px !important;
     padding-right: 16px !important;
   }
-  
+
   .metric-card,
   .description-section .q-card,
   .performance-section .q-card,
@@ -1048,7 +949,7 @@ onMounted(() => {
       padding: 20px;
     }
   }
-  
+
   .change-card {
     .q-card-section {
       padding: 16px;
@@ -1061,6 +962,7 @@ onMounted(() => {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
